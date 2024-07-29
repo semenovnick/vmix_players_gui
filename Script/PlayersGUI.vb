@@ -318,7 +318,14 @@
                             dim markOut as integer = -1
                             
                             dim isRemain as boolean = false
-                            Boolean.TryParse(playersGUItitle_Input.Text("txt_isRemain_" & index.tostring()), isRemain)
+                            if not Boolean.TryParse(playersGUItitle_Input.Text("txt_isRemain_" & index.tostring()), isRemain) then
+                                dim boolyInt as integer
+                                if Integer.TryParse(playersGUItitle_Input.Text("txt_isRemain_" & index.tostring()), boolyInt) then
+                                    if boolyInt > 0 then
+                                        isRemain = true
+                                    end if 
+                                end if
+                            end if
                             
                             
                             if player_InpuntNode.Attributes.GetNamedItem("duration") isnot Nothing then
@@ -373,6 +380,7 @@
                                     fields("txt_progress_") = math.Round((position/duration)*progressBarWidth)
                                     ' ============= coloring Remaining time ==================================
                                     dim alarmcolor as string = noAlarmColor
+                                    if isRemain Then
                                         if positionForTime < redAlarmTime then
                                             alarmcolor = redAlarmColor
                                         else
@@ -381,6 +389,7 @@
                                             end if
                                         end if
                                         API.Function("SetTextColour", Input:= playersGUItitle_InputName, Value:=alarmcolor, SelectedName:= "txt_curr_" & index.tostring())
+                                    end if
                                     '
                                 end if  
                             end if  
